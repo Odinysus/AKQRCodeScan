@@ -37,8 +37,10 @@ detail info to see my blog:[iOS中的二维码](http://www.jianshu.com/p/3f05e63
 可选项:  
 * 设置是否位于右上角的显示切换按钮(可切换前摄像头扫描)
 
-      hiddenChnageButton = NO;
+        hiddenChnageButton = NO;
 
 * 如果你想要改变中间的扫描区域的宽度(默认是屏幕宽度的80%的正方形)  
 
-      widthOfInterest = [UIScreen mainScreen].bounds.size.width * 0.8;
+        widthOfInterest = [UIScreen mainScreen].bounds.size.width * 0.8;
+
+更多详情请查看我的博客[iOS中的二维码](http://www.jianshu.com/p/3f05e63d9ada)  
