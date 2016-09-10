@@ -39,7 +39,9 @@
 {
     self = [super init];
     if (self) {
-        _widthOfInterest = [UIScreen mainScreen].bounds.size.width * 0.8f;
+        
+        CGSize size = [UIScreen mainScreen].bounds.size;
+        _widthOfInterest = MIN(size.width, size.height) * 0.8f;
     }
     return self;
 }
@@ -272,8 +274,11 @@
     UIBezierPath *circlePath = [UIBezierPath bezierPathWithRect:self.clipRect];
     [path appendPath:circlePath];
     self.maskLayer.path = path.CGPath;
-    //    [path setUsesEvenOddFillRule:YES];
-    // 计算实际框大小
+    // 捕捉区域大小
+    AVCaptureVideoPreviewLayer *previewLayer = (AVCaptureVideoPreviewLayer *)self.preview.layer;
+    CGRect rectOfInterect = [previewLayer metadataOutputRectOfInterestForRect:self.clipRect];
+    NSLog(@"rect of interest:%@", NSStringFromCGRect(rectOfInterect));
+    [self.reader setRectOfInterest:rectOfInterect];
     
 }
 
