@@ -14,9 +14,9 @@ need to do:
         codeBlock = ^(NSString value) { NSLog(@"the qrcode is %@", value); }
 
 option:
-* if you want to add an button which can change the font camera fatten , in the top right corner.
+* if you want to add an button which can change the font camera fatten , in the top right corner.  
 
-        hiddenChnageButton = NO;
+          hiddenChnageButton = NO;
 
 * if you want to change the scan area width (default is 80% of screen size width)  
 
