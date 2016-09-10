@@ -11,12 +11,12 @@ it always check the authorization status after `viewDidLoad` and `viewDidAppear`
 need to do:
 * drag the `AKQrcodeViewController` to your project. import `AKQrcodeViewController.h` in your head file. and set the `codeBlock`  
 
-      codeBlock = ^(NSString value) { NSLog(@"the qrcode is %@", value); }
+        codeBlock = ^(NSString value) { NSLog(@"the qrcode is %@", value); }
 
 option:
 * if you want to add an button which can change the font camera fatten , in the top right corner.
 
-      hiddenChnageButton = NO;
+        hiddenChnageButton = NO;
 
 * if you want to change the scan area width (default is 80% of screen size width)  
 
