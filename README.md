@@ -20,9 +20,11 @@ option:
 
 * if you want to change the scan area width (default is 80% of screen size width)  
 
-      widthOfInterest = [UIScreen mainScreen].bounds.size.width * 0.8;
+        widthOfInterest = [UIScreen mainScreen].bounds.size.width * 0.8;
 
 detail info to see my blog:[iOS中的二维码](http://www.jianshu.com/p/3f05e63d9ada)  
+
+
 
 这是一个模仿微信扫描二维码的例子.并对几个细节进行控制:  
 * **卡顿** 由于`[self.session startRunning]`可能会花费比较长的时间.可能会发费0.5s,会有一个卡顿的现象.session的初始化和配置都放在异步线程中.但是有关`previewLayer`的操作要放在主线程中更新.并在加载时显示`UIActivityIndicatorView`动画.
