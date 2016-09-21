@@ -36,6 +36,8 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
     if (indexPath.row == 0) {
         cell.textLabel.text = @"scan detected two-dimensional tabcode";
+    } else if (indexPath.row == 1) {
+        cell.textLabel.text = @"scan qrcode from capture and image";
     }
     return cell;
 }
@@ -43,11 +45,23 @@
 #pragma mark - tableview delegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if (indexPath.row == 0) {
+        
         AKCodeViewController *codeViewController = [[AKCodeViewController alloc] init];
         codeViewController.codeBlock = ^(NSString *value){
             NSLog(@"the qrcode is %@", value);
         };
         [self presentViewController:codeViewController animated:YES completion:nil];
+    } else if (indexPath.row == 1) {
+        
+        AKCodeViewController *codeViewController = [[AKCodeViewController alloc] init];
+        codeViewController.codeBlock = ^(NSString *value){
+            NSLog(@"the qrcode is %@", value);
+        };
+        UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:codeViewController];
+        // bar buton
+        [self presentViewController:nav animated:YES completion:nil];
+    }
     
 }
 @end

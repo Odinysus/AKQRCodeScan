@@ -11,7 +11,7 @@
 #import "AKCodePreview.h"
 
 
-@interface AKCodeViewController ()
+@interface AKCodeViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 
 @property (nonatomic, strong) AKCodePreview *preview;
 
@@ -122,15 +122,18 @@
             previewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
             previewLayer.connection.videoOrientation = initialVideoOrientation;
             CGRect rectOfInterect = [previewLayer metadataOutputRectOfInterestForRect:rect];
-            NSLog(@"rect of interest:%@", NSStringFromCGRect(rectOfInterect));
-            NSLog(@"rect :%@", NSStringFromCGRect(rect));
             [self.reader setRectOfInterest:rectOfInterect];
 
         });
     });
     
     [self configureCornerImageViews];
-    [self.view addSubview:self.backBtn];
+
+    if (self.navigationController) {
+        [self configRightBarBtn];
+    } else {
+        [self.view addSubview:self.backBtn];
+    }
 //    self.hiddenChnageButton = NO;
 }
 
@@ -217,6 +220,26 @@
     [self.view addSubview:self.rightBottomImgView];
     
     self.widthOfInterest = self.widthOfInterest;
+}
+
+- (void)configRightBarBtn {
+    // bar buton
+    UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithTitle:@"photo"
+                                                             style:UIBarButtonItemStylePlain
+                                                            target:self
+                                                            action:@selector(onClickRightBtn:)];
+    self.navigationItem.rightBarButtonItem = item;
+    
+}
+
+#pragma mark - action
+- (void)onClickRightBtn:(UIBarButtonItem *)btn
+{
+    UIImagePickerController *pick = [[UIImagePickerController alloc] init];
+    pick.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+    pick.delegate = self;
+    if ([self.reader isRunning]) [self.reader stopRunning];
+    [self presentViewController:pick animated:YES completion:nil];
 }
 
 - (void)onClickCammera:(UIButton *)btn
@@ -307,5 +330,32 @@
 {
     [super decodeRestorableStateWithCoder:coder];
 }
+
+#pragma mark - image pick delegate
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info
+{
+    [self.reader startRunning];
+    UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
+    if (image) {
+        CIDetector *detector = [CIDetector detectorOfType:CIDetectorTypeQRCode context:nil options:@{CIDetectorAccuracy:CIDetectorAccuracyHigh}];
+        
+        NSData *data = UIImagePNGRepresentation(image);
+        CIImage *img = [CIImage imageWithData:data];
+        NSArray *features = [detector featuresInImage:img options:nil];
+        if (features.count > 0) {
+            for (CIFeature *feature in features) {
+                if (![feature isKindOfClass:[CIQRCodeFeature class]]) continue;
+                NSLog(@"msg:%@", [(CIQRCodeFeature *)feature messageString]);
+            }
+        } else {
+            NSLog(@"No feature!!!");
+        }
+    } else {
+        NSLog(@"No image!!!");
+    }
+    
+    [picker dismissViewControllerAnimated:YES completion:NULL];
+}
+
 
 @end
